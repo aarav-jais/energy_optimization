@@ -1,0 +1,62 @@
+{% extends 'energy/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<a class="logout-btn" href="{% url 'logout' %}">Logout</a>
+
+<h1>Energy Consumption Data</h1>
+<table>
+    <tr>
+        <th>Device Name</th>
+        <th>Energy Used (kWh)</th>
+        <th>Timestamp</th>
+    </tr>
+    {% for data in energy_data %}
+    <tr>
+        <td>{{ data.device_name }}</td>
+        <td>{{ data.energy_used }}</td>
+        <td>{{ data.timestamp }}</td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="3">No data available</td></tr>
+    {% endfor %}
+</table>
+
+<h2>Optimization Suggestions</h2>
+<ul>
+    {% for suggestion in optimization_suggestions %}
+        <li><strong>{{ suggestion.device_name }}</strong>: {{ suggestion.optimization_suggestion }}</li>
+    {% empty %}
+        <li>No suggestions available.</li>
+    {% endfor %}
+</ul>
+
+<h2>Energy Usage Chart</h2>
+<canvas id="energyChart" width="400" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('energyChart').getContext('2d');
+    const energyChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ device_names|safe }},
+            datasets: [{
+                label: 'Energy Used (kWh)',
+                data: {{ energy_values|safe }},
+                backgroundColor: 'rgba(46, 204, 113, 0.6)',
+                borderColor: 'rgba(46, 204, 113, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Energy Benchmark Comparison</title>
+    <style>
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #444;
+            text-align: center;
+        }
+        th {
+            background-color: #eee;
+        }
+    </style>
+</head>
+<body>
+    <h2 style="text-align: center;">Energy Benchmark Comparison</h2>
+    <table>
+        <tr>
+            <th>Device Name</th>
+            <th>Benchmark (kWh)</th>
+            <th>Actual Consumption (kWh)</th>
+            <th>Status</th>
+        </tr>
+        {% for row in comparison_data %}
+        <tr>
+            <td>{{ row.device_name }}</td>
+            <td>{{ row.benchmark }}</td>
+            <td>{{ row.actual }}</td>
+            <td style="color: {% if row.status == 'Overused' %}red{% else %}green{% endif %};">
+                {{ row.status }}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
